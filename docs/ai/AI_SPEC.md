@@ -1,29 +1,20 @@
-# AI Specification — Real Estate Lead Bot
+# AI Specification
 
-## Purpose
+AI is responsible for natural-language understanding and generation. It must not own authentication, database integrity, or final business rules.
 
-Defines what the AI layer must understand, extract, generate, and the boundaries it must not cross.
+## Core tasks
 
-## Responsibilities
+1. Intent detection (BUY, RENT, SELL, LAND, PROPERTY_ENQUIRY, GENERAL_ENQUIRY, HUMAN_AGENT, OTHER)
+2. Entity extraction (name, email, phone, property type, bedrooms, location, budget, timeline, etc.)
+3. Missing-information detection
+4. Clarification question generation
+5. Customer response generation
+6. Conversation summarization
+7. Human-handoff detection
 
-- Intent detection (BUY, RENT, SELL, LAND, PROPERTY_ENQUIRY, HUMAN_AGENT, OTHER)
-- Entity extraction (property type, bedrooms, location, budget, timeline, contact details)
-- Missing-information detection
-- Clarification question generation
-- Customer response generation
-- Conversation summarization
-- Human-handoff detection
+## Output
 
-## Non-responsibilities
-
-AI must **not**:
-- Authenticate or authorize users
-- Write directly to PostgreSQL
-- Decide final business rules or lead scores (scoring is deterministic in the application)
-- Invent property availability, prices, or commitments
-- Confirm bookings without system verification
-
-## Expected Structured Output Example
+AI should return structured JSON, for example:
 
 ```json
 {
@@ -43,11 +34,14 @@ AI must **not**:
 }
 ```
 
-## Principles
+The application validates this output before using it.
 
-- Preserve unknown fields as null — never invent values.
-- Maintain conversation context across turns.
-- Prefer short, helpful, professional responses.
-- Escalate to human when confidence is low, customer requests it, or the case is complex/high-value.
+## Non-responsibilities
 
-The full original AI Specification content remains available in git history.
+AI must not:
+- Authenticate or authorize users
+- Write directly to PostgreSQL
+- Invent property availability or prices
+- Make binding commitments without system verification
+
+*Full prompt guidelines, edge cases, and evaluation criteria are preserved in git history of the previous root file `AI Specification.md`.*

@@ -1,27 +1,27 @@
-# UI/UX Specification — Real Estate Lead Bot
+# UI/UX Specification
 
-## Customer Interface
+## Customer interface
 
-- Chat window with message history
+- Chat window
+- Message list
 - Message input + send
 - Loading / typing indicator
-- Error state + retry
-- Progressive collection of lead information (no rigid form required at start)
+- Error + retry states
+- Progressive collection of lead information
 
-## Sales Dashboard
+## Sales dashboard
 
-- Lead list with search, filters, sorting
-- Lead detail view (extracted requirements, score, classification, status)
+- Lead list (search, filter, sort)
+- Lead details (requirements, score, classification, status, assignment)
 - Conversation history
-- Assignment + status updates
 - Follow-up management
 - Activity timeline
 
-## Design Principles
+## Principles
 
-- Fast, clear, mobile-friendly chat experience
-- Sales team sees everything needed to act without hunting
-- Loading and error states are explicit
-- No direct database access from the frontend
+- React is the only UI layer.
+- No direct database access from the frontend.
+- Business rules and scoring stay on the backend.
+- Clear loading and error states for every network action.
 
-Full original UI/UX Specification content is available in git history.
+*Full screen-by-screen and component specifications are preserved in git history of the previous root file `UI-UX Specification.md`.*

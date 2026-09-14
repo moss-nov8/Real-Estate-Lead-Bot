@@ -1,41 +1,29 @@
-# System Architecture Document (SAD) — Real Estate Lead Bot
+# System Architecture Document (SAD)
 
-## High-Level Architecture
+## High-level architecture
 
 ```text
-             CUSTOMER
-                 │
-                 ▼
-              REACT
-                 │
-                 ▼
-             FASTAPI
-              /    \
-             /      \
-            ▼        ▼
-      POSTGRESQL    N8N
-                     │
-              ┌──────┼──────┐
-              ▼      ▼      ▼
-             AI  NOTIFY  SHEETS
+CUSTOMER → REACT → FASTAPI → POSTGRESQL
+                        ↘
+                         N8N → AI / NOTIFY / SHEETS
 ```
 
-## Component Responsibilities
+## Responsibilities
 
-| Component   | Responsibility |
-|-------------|----------------|
-| React       | Customer chat UI + Sales dashboard |
-| FastAPI     | API, validation, auth, business rules, DB access |
-| PostgreSQL  | Source of truth for leads, conversations, scores, activities |
-| n8n         | Workflow orchestration, AI calls, notifications, Sheets sync |
-| AI (LLM)    | Understanding, extraction, response generation |
-| Google Sheets | Optional operational reporting (never source of truth) |
+| Layer | Responsibility |
+|-------|----------------|
+| React | User interface |
+| FastAPI | API, validation, auth, business boundaries |
+| PostgreSQL | Source of truth |
+| n8n | Workflow orchestration and integrations |
+| AI | Understanding and generation |
+| Google Sheets | Optional operational reporting |
 
-## Key Principles
+## Principles
 
-- Modular monolith + n8n (no premature microservices)
-- AI does not write directly to the database
-- Deterministic qualification scoring in the application layer
-- Single VPS deployment for MVP
+- Modular monolith + n8n (no premature microservices).
+- AI output is validated before persistence.
+- Single VPS deployment for MVP.
+- Clear separation of concerns; do not put business logic in React or let AI write the database.
 
-Full original SAD content is available in git history.
+*Full architecture diagrams, sequence flows, and non-functional detail are preserved in git history of the previous root file `System Architecture Document (SAD).md`.*

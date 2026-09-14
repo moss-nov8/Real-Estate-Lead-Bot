@@ -1,41 +1,57 @@
-# PRD — Real Estate Lead Bot (PrimeHomes Realty)
+# PRD — Real Estate Lead Bot
 
+**Product:** PrimeHomes Realty — Real Estate Lead Bot  
+**Document:** Product Requirements Document (PRD)  
 **Version:** 1.0  
 **Status:** Draft  
-**Stack:** React + FastAPI + n8n + PostgreSQL + Google Sheets
+**Primary Stack:** React + FastAPI + n8n + SQL Database + Google Sheets  
+**Product Type:** AI-powered Lead Management & Qualification System
 
-## Executive Summary
+---
 
-The Real Estate Lead Bot acts as an AI-powered digital receptionist for PrimeHomes Realty. It receives natural-language customer enquiries, extracts structured requirements, qualifies leads, stores them, responds, and notifies the sales team when needed.
+## 1. Executive Summary
 
-## Goals
+PrimeHomes Realty receives potential customer enquiries through digital channels. These enquiries vary significantly in structure, completeness, and intent.
 
-- Automate lead capture and qualification
-- Understand natural language
-- Improve response time
-- Reduce sales team repetitive work
-- Maintain a reliable structured record of leads and conversations
+The Real Estate Lead Bot will act as an AI-powered digital receptionist that:
 
-## Non-Goals (MVP)
+1. Receives customer messages.
+2. Understands customer intent.
+3. Extracts structured requirements.
+4. Identifies missing information.
+5. Continues the conversation when necessary.
+6. Creates and stores a lead.
+7. Scores and classifies the lead.
+8. Responds appropriately to the customer.
+9. Notifies the sales team when required.
+10. Allows sales representatives to follow up.
+11. Tracks the lead lifecycle.
+12. Maintains a record of customer interactions.
 
-- Full property marketplace / listing management
-- Automated negotiation or contract generation
-- Payment processing
-- Fully autonomous AI sales agent that makes binding commitments
+---
 
-## Core User Journey
+## 2–9. Vision, Problem, Goals, Users, Journey, Lead Information
 
-Customer message → AI understanding → extraction → missing-info questions if needed → lead scoring & classification → store → respond → notify sales (if HOT) → human follow-up.
+(See original full PRD content in git history of `PrimeHomes_Real_Estate_Lead_Bot_PRD_v1.0.md` for complete detail.)
 
-## Lead Information
+Core lead information includes customer details, property requirements, transaction intent (BUY/RENT/SELL/INQUIRE), timeline, and status lifecycle (NEW → QUALIFYING → QUALIFIED → … → CONVERTED / LOST / NURTURE).
 
-Customer: name, email, phone  
-Property: type, bedrooms, location, budget  
-Intent: BUY / RENT / SELL / INQUIRE  
-Timeline: IMMEDIATE / WITHIN_1_MONTH / WITHIN_3_MONTHS / WITHIN_6_MONTHS / RESEARCHING
+---
 
-## Lead Classification
+## 10–16. AI, Qualification, Routing, Responses, Handoff, Sales, Lifecycle
 
-HOT (80–100) · WARM (60–79) · COLD (30–59) · UNQUALIFIED (0–29)
+AI performs intent detection, entity extraction, missing-information detection, and conversation understanding. Final scoring is deterministic and owned by the application. HOT leads trigger immediate sales notification. Human handoff is supported for high-value or complex cases.
 
-Full original PRD content is available in git history.
+---
+
+## 17–20. Components, Functional & Non-Functional Requirements, Data Ownership
+
+**Components:** React, FastAPI, n8n, PostgreSQL (source of truth), Google Sheets (optional operational reporting).
+
+**Principle:** Google Sheets must not become the authoritative database.
+
+Full functional requirements (FR-001 … FR-017) and non-functional requirements (performance, reliability, security, observability, scalability) are defined in the original PRD.
+
+---
+
+*Note: This is a structured summary placed under `docs/PRD.md` for navigation. The complete original text is preserved in the repository git history from the previous root file `PrimeHomes_Real_Estate_Lead_Bot_PRD_v1.0.md`.*

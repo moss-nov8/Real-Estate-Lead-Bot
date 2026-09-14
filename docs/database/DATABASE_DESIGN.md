@@ -1,10 +1,8 @@
-# Database & Data Model Specification — Real Estate Lead Bot
+# Database & Data Model Specification
 
-## Source of Truth
+PostgreSQL is the primary source of truth for the Real Estate Lead Bot.
 
-PostgreSQL is the primary system of record.
-
-## Primary Tables
+## Planned core tables
 
 - `users`
 - `roles`
@@ -17,21 +15,23 @@ PostgreSQL is the primary system of record.
 - `activities`
 - `integration_syncs`
 
-## Key Principles
+## Key principles
 
-- UUIDs for primary keys where appropriate
-- Timestamps (created_at / updated_at)
-- Soft status transitions recorded in activities
-- Never invent missing customer data
-- Google Sheets is secondary / operational only
+- Leads and conversations are the centre of the model.
+- Messages belong to conversations and are linked to leads.
+- Lead scores are versioned / historied so changes are auditable.
+- Activities record important state changes (created, qualified, assigned, contacted, converted, lost, etc.).
+- UUIDs for primary keys are preferred.
+- Timestamps (`created_at`, `updated_at`) on all main entities.
+- Soft-delete or status flags where appropriate rather than hard deletes of lead history.
 
-## Implementation Order
+## Implementation order
 
-1. Database connection
-2. SQLAlchemy models
-3. Alembic
+1. Database connection (SQLAlchemy + async)
+2. Models
+3. Alembic configuration
 4. Initial migration
-5. Seed data
-6. Database tests
+5. Seed data (roles, sample users if needed)
+6. Model / relationship tests
 
-Full original Database & Data Model Specification content (detailed columns, relationships, constraints) is available in git history.
+*Full original field-level design, relationships, indexes, and constraints are preserved in git history of the previous root file `Database & Data Model Specification.md`.*
