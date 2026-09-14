@@ -6,13 +6,7 @@
 
 This document defines how the Real Estate Lead Bot should be deployed to a VPS.
 
-The deployment should be:
-
-- Simple.
-- Affordable.
-- Easy to maintain.
-- Easy to troubleshoot.
-- Suitable for an MVP and early production use.
+The deployment should be simple, affordable, easy to maintain, and suitable for an MVP.
 
 ---
 
@@ -28,90 +22,103 @@ ONE VPS
 └── n8n
 ```
 
----
-
-## 3. Recommended Stack
-
+Stack:
 - Ubuntu LTS
 - Docker + Docker Compose
-- Nginx (reverse proxy + HTTPS)
-- PostgreSQL (container or managed)
-- n8n (container)
-- Let’s Encrypt / Certbot for HTTPS
+- Nginx reverse proxy
+- HTTPS (Let’s Encrypt)
+- Persistent volumes for PostgreSQL and n8n
 
 ---
 
-## 4. High-Level Steps
+## 3. High-Level Steps
 
-1. Provision VPS
-2. Create deploy user + SSH hardening
-3. Install Docker + Docker Compose
-4. Clone repository
-5. Configure production `.env`
-6. Build frontend
-7. Run migrations
+1. Provision VPS (Ubuntu LTS)
+2. Create deploy user + SSH keys
+3. Install Docker & Docker Compose
+4. Configure firewall
+5. Clone repository
+6. Create production `.env`
+7. Build frontend
 8. Start services with Docker Compose
-9. Configure Nginx + domain + HTTPS
-10. Validate end-to-end
-11. Set up backups and monitoring
+9. Run database migrations
+10. Configure Nginx + domain + HTTPS
+11. Verify health, chat flow, and notifications
+12. Configure backups
 
 ---
 
-## 5. Environment Variables (Production)
+## 4. Services & Ports (internal)
 
-Use a production `.env` (never committed) with:
+- FastAPI: 8000
+- React (or static via Nginx)
+- PostgreSQL: 5432 (not exposed publicly)
+- n8n: 5678 (protected)
 
-- Strong `SECRET_KEY` / `JWT_SECRET`
-- Production `DATABASE_URL`
-- Correct `CORS_ORIGINS`
-- Real `N8N_WEBHOOK_URL` / secrets
-- Real AI provider keys
-- Google Sheets credentials if used
+Public traffic goes through Nginx (80/443).
 
 ---
 
-## 6. Docker Compose (Production)
+## 5. Environment
 
-A production `docker-compose.prod.yml` (or override) should run:
+Production uses a private `.env` (never committed) based on `.env.example`.
 
-- postgres (with volume)
-- backend (FastAPI)
-- n8n (with volume)
-- (optional) frontend served by Nginx or a static container
+Critical variables:
+- `DATABASE_URL`
+- `JWT_SECRET` / `SECRET_KEY`
+- `N8N_WEBHOOK_SECRET`
+- `AI_API_KEY`
+- `CORS_ORIGINS`
+
+---
+
+## 6. Docker Compose (production)
+
+A `docker-compose.prod.yml` (or equivalent) should run:
+- postgres
+- backend
+- n8n
+- (optional) frontend container or pure static files served by Nginx
+
+Volumes:
+- PostgreSQL data
+- n8n data
 
 ---
 
 ## 7. Nginx
 
-- Serve React build on the main domain
-- Proxy `/api` to FastAPI
-- Proxy n8n on a subdomain if needed
-- Force HTTPS and set security headers
+- Frontend at domain root
+- API under `/api` or `api.` subdomain
+- n8n under a protected path or subdomain
+- SSL via Certbot / Let’s Encrypt
 
 ---
 
-## 8. Backups
+## 8. Backups & Operations
 
-- PostgreSQL daily dumps
-- n8n data volume
-- Off-site retention
+- Daily PostgreSQL dumps
+- n8n workflow export / volume backup
+- Log rotation
+- Ability to restart services after VPS reboot
 
 ---
 
 ## 9. Validation Checklist
 
-- Frontend accessible over HTTPS
-- API health endpoint returns 200
-- Database connected
-- n8n reachable and webhooks work
-- Customer message → AI → lead stored → response
-- HOT lead notification works
-- Restart survival test
+- [ ] Frontend accessible over HTTPS
+- [ ] API health endpoint OK
+- [ ] Database connected
+- [ ] n8n reachable (authenticated)
+- [ ] Customer message flow works end-to-end
+- [ ] HOT lead notification works
+- [ ] Backups configured
+- [ ] VPS reboot recovery tested
 
 ---
 
 ## 10. Principle
 
-Start with a single VPS. Scale only when the application needs it.
+Start with a single well-configured VPS. Do not introduce Kubernetes or multi-service clusters until the MVP workload requires it.
 
-The full original DEPLOYMENT_SPEC content is available in git history if more detail is required.
+Full original detail is preserved in git history of the previous root `DEPLOYMENT_SPEC.md`.
