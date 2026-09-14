@@ -2,11 +2,15 @@
 Real Estate Lead Bot — FastAPI entrypoint.
 """
 
+import logging
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.v1 import health
+from app.api.v1 import conversations, health, leads
 from app.core.config import settings
+
+logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -24,6 +28,8 @@ app.add_middleware(
 )
 
 app.include_router(health.router, prefix="/api/v1", tags=["health"])
+app.include_router(leads.router, prefix="/api/v1")
+app.include_router(conversations.router, prefix="/api/v1")
 
 
 @app.get("/")
